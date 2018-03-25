@@ -1,0 +1,6 @@
+#!/bin/bash
+
+export PROJECT_DIR=`pwd`
+export METAL_DIR="$( cd "$( dirname "$0" )/.." && pwd )"
+
+docker-compose --file "$METAL_DIR/docker-compose.yml" down

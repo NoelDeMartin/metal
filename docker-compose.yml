@@ -1,0 +1,20 @@
+version: '3.2'
+services:
+  mongo:
+    image: mongo
+    command: mongod
+    ports:
+      - '27017:27017'
+  web:
+    build:
+      context: "${PROJECT_DIR}"
+      dockerfile: "${METAL_DIR}/rails/Dockerfile"
+    volumes:
+      - type: bind
+        source: "${PROJECT_DIR}"
+        target: /app
+    ports:
+      - '3000:3000'
+    depends_on:
+      - mongo
+    command: bin/rails server
