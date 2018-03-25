@@ -1,0 +1,1 @@
+docker-compose --file "$METAL_HOME/docker-compose.yml" up -d web mongo

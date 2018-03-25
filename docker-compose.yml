@@ -7,11 +7,11 @@ services:
       - '27017:27017'
   web:
     build:
-      context: "${PROJECT_DIR}"
-      dockerfile: "${METAL_DIR}/rails/Dockerfile"
+      context: "${PROJECT_PATH}"
+      dockerfile: "${METAL_HOME}/rails/Dockerfile"
     volumes:
       - type: bind
-        source: "${PROJECT_DIR}"
+        source: "${PROJECT_PATH}"
         target: /app
     ports:
       - '3000:3000'
