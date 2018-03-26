@@ -6,9 +6,30 @@ then
     exit
 fi
 
+COMMAND=$1
+
+OPTIONS=`getopt --longoptions=debug --name "$0" -- "$@"`
+eval set -- "$OPTIONS"
+while true; do
+    case "$1" in
+        -d|--debug)
+            export METAL_DEBUG=true
+            shift
+            ;;
+        --)
+            shift
+            break
+            ;;
+        *)
+            echo "Programming error"
+            exit 3
+            ;;
+    esac
+done
+
 export PROJECT_PATH=`pwd`
 
-case "$1" in
+case $COMMAND in
     "build")
         bash "$METAL_HOME/src/build.sh"
         ;;
@@ -20,6 +41,9 @@ case "$1" in
         ;;
     "shell")
         bash "$METAL_HOME/src/shell.sh"
+        ;;
+    "logs")
+        bash "$METAL_HOME/src/logs.sh"
         ;;
     *)
         echo "Unknown command \"$1\""

@@ -5,6 +5,8 @@ services:
     command: mongod
     ports:
       - '27017:27017'
+    volumes:
+      - "${PROJECT_PATH}/tmp/db:/data/db"
   web:
     build:
       context: "${PROJECT_PATH}"
