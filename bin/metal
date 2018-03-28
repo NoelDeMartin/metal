@@ -29,23 +29,9 @@ done
 
 export PROJECT_PATH=`pwd`
 
-case $COMMAND in
-    "build")
-        bash "$METAL_HOME/src/build.sh"
-        ;;
-    "up")
-        bash "$METAL_HOME/src/up.sh"
-        ;;
-    "down")
-        bash "$METAL_HOME/src/down.sh"
-        ;;
-    "shell")
-        bash "$METAL_HOME/src/shell.sh"
-        ;;
-    "logs")
-        bash "$METAL_HOME/src/logs.sh"
-        ;;
-    *)
-        echo "Unknown command \"$1\""
-        ;;
-esac
+if [ -e "$METAL_HOME/commands/$COMMAND.sh" ]
+then
+    bash "$METAL_HOME/commands/$COMMAND.sh"
+else
+    echo "Unknown command \"$COMMAND\""
+fi

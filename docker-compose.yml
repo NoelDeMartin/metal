@@ -8,15 +8,17 @@ services:
     volumes:
       - "${PROJECT_PATH}/tmp/db:/data/db"
   web:
-    build:
-      context: "${PROJECT_PATH}"
-      dockerfile: "${METAL_HOME}/rails/Dockerfile"
+    build: "${METAL_HOME}/rails"
+    command: 'rails server'
+    tty: true
+    stdin_open: true
+    environment:
+      BUNDLE_APP_CONFIG: /app/.bundle
+    ports:
+      - '3000:3000'
     volumes:
       - type: bind
         source: "${PROJECT_PATH}"
         target: /app
-    ports:
-      - '3000:3000'
     depends_on:
       - mongo
-    command: bin/rails server
