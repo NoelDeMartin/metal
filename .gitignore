@@ -1,0 +1,3 @@
+mongo/db
+nginx/sites/*
+!nginx/sites/default.conf

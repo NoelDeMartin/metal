@@ -1,1 +1,1 @@
-docker-compose --file "$METAL_HOME/docker-compose.yml" logs web
+docker logs "metal_$METAL_CONTAINER"

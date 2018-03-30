@@ -6,7 +6,15 @@ then
     exit
 fi
 
+export PROJECT_PATH=`pwd`
+export PROJECT_NAME=${PWD##*/}
+
 COMMAND=$1
+if [ -z "$2" ]; then
+    export METAL_CONTAINER="$PROJECT_NAME"
+else
+    export METAL_CONTAINER="$2"
+fi
 
 OPTIONS=`getopt --longoptions=debug --name "$0" -- "$@"`
 eval set -- "$OPTIONS"
@@ -27,10 +35,7 @@ while true; do
     esac
 done
 
-export PROJECT_PATH=`pwd`
-
-if [ -e "$METAL_HOME/commands/$COMMAND.sh" ]
-then
+if [ -e "$METAL_HOME/commands/$COMMAND.sh" ]; then
     bash "$METAL_HOME/commands/$COMMAND.sh"
 else
     echo "Unknown command \"$COMMAND\""

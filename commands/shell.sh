@@ -1,1 +1,1 @@
-docker-compose --file "$METAL_HOME/docker-compose.yml" exec web ash
+docker exec -it "metal_$METAL_CONTAINER" ash
