@@ -1,23 +1,24 @@
 version: '3.2'
 networks:
-  default:
-    external:
-      name: metal_network
+  metal_network:
+    external: true
 services:
   mongo:
     image: mongo
-    container_name: 'metal_mongo'
     command: mongod
     ports:
       - '27017:27017'
     volumes:
       - "${METAL_HOME}/mongo/db:/data/db"
+    networks:
+      - metal_network
   nginx:
     image: nginx:alpine
-    container_name: 'metal_nginx'
     ports:
       - '80:80'
     volumes:
       - "${METAL_HOME}/nginx/sites:/etc/nginx/conf.d"
+    networks:
+      - metal_network
   rails:
-    build: "${METAL_HOME}/rails"
+    build: "$METAL_HOME/rails"

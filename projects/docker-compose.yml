@@ -1,0 +1,22 @@
+version: '3.2'
+networks:
+  metal_network:
+    external: true
+services:
+  $PROJECT_NAME:
+    build: "$METAL_HOME/rails"
+    command: 'bin/rails server'
+    tty: true
+    stdin_open: true
+    environment:
+      BUNDLE_APP_CONFIG: /app/.bundle
+    expose:
+      - '3000'
+    volumes:
+      - type: bind
+        source: '/home/jin/workspace/$PROJECT_NAME'
+        target: /app
+    depends_on:
+      - mongo
+    networks:
+      - metal_network

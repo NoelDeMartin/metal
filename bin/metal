@@ -16,27 +16,8 @@ else
     export METAL_CONTAINER="$2"
 fi
 
-OPTIONS=`getopt --longoptions=debug --name "$0" -- "$@"`
-eval set -- "$OPTIONS"
-while true; do
-    case "$1" in
-        -d|--debug)
-            export METAL_DEBUG=true
-            shift
-            ;;
-        --)
-            shift
-            break
-            ;;
-        *)
-            echo "Programming error"
-            exit 3
-            ;;
-    esac
-done
-
-if [ -e "$METAL_HOME/commands/$COMMAND.sh" ]; then
-    bash "$METAL_HOME/commands/$COMMAND.sh"
+if [ -e "$METAL_HOME/lib/commands/$COMMAND.sh" ]; then
+    bash "$METAL_HOME/lib/commands/$COMMAND.sh"
 else
     echo "Unknown command \"$COMMAND\""
 fi
