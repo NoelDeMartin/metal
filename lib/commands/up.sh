@@ -9,7 +9,8 @@ if ! is_project_active; then
         sed "s/\$PROJECT_NAME/$PROJECT_NAME/g" "$METAL_HOME/projects/$PROJECT_NAME/$PROJECT_NAME.test.conf" -i
 
         cp "$METAL_HOME/projects/docker-compose.yml" "$METAL_HOME/projects/$PROJECT_NAME/docker-compose.yml"
-        sed "s/\$PROJECT_NAME/$PROJECT_NAME/g" "$METAL_HOME/projects/$PROJECT_NAME/docker-compose.yml" -i
+        sed "s#\$PROJECT_NAME#$PROJECT_NAME#g" "$METAL_HOME/projects/$PROJECT_NAME/docker-compose.yml" -i
+        sed "s#\$PROJECT_PATH#$PROJECT_PATH#g" "$METAL_HOME/projects/$PROJECT_NAME/docker-compose.yml" -i
     fi
 
     cp "$METAL_HOME/projects/$PROJECT_NAME/$PROJECT_NAME.test.conf" "$METAL_HOME/nginx/sites"

@@ -14,7 +14,7 @@ services:
       - '3000'
     volumes:
       - type: bind
-        source: '/home/jin/workspace/$PROJECT_NAME'
+        source: '$PROJECT_PATH'
         target: /app
     depends_on:
       - mongo
