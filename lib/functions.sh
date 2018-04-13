@@ -3,8 +3,8 @@
 TRUE=0
 FALSE=1
 DOCKER_COMPOSE="docker-compose --file=$METAL_HOME/docker-compose.yml"
-ACTIVE_PROJECTS="$METAL_HOME/projects/active"
-INSTALLED_PROJECTS="$METAL_HOME/projects/installed"
+ACTIVE_PROJECTS="$METAL_HOME/.projects/active"
+INSTALLED_PROJECTS="$METAL_HOME/.projects/installed"
 
 function has_active_projects() {
     if [[ $(cat $ACTIVE_PROJECTS | sed '/^\s*$/d' | wc -l) > 0 ]]; then
@@ -31,6 +31,7 @@ function is_project_active() {
 }
 
 function activate_project() {
+    mkdir -p "$METAL_HOME/.projects"
     echo $PROJECT_NAME >> $ACTIVE_PROJECTS
 
     cp "$METAL_HOME/nginx/template.conf" "$METAL_HOME/nginx/sites/$PROJECT_NAME.test.conf"
@@ -42,7 +43,7 @@ function activate_project() {
 
 function deactivate_project() {
     rm "$METAL_HOME/nginx/sites/$PROJECT_NAME.test.conf"
-    sed "/$PROJECT_NAME/d" "$METAL_HOME/projects/active" -i
+    sed "/$PROJECT_NAME/d" $ACTIVE_PROJECTS -i
 
     $DOCKER_COMPOSE stop $PROJECT_NAME
     $DOCKER_COMPOSE restart nginx
@@ -63,6 +64,7 @@ function is_project_installed() {
 }
 
 function install_project() {
+    mkdir -p "$METAL_HOME/.projects"
     echo "$PROJECT_NAME $PROJECT_PATH" >> $INSTALLED_PROJECTS
 
     rebuild_docker_compose
