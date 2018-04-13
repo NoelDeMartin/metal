@@ -2,5 +2,5 @@ mongo/db
 nginx/sites/*
 !nginx/sites/default.conf
 projects/*
-!projects/docker-compose.yml
-!projects/nginx.conf
+!projects/.keep
+docker-compose.yml

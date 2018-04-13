@@ -1,9 +1,4 @@
-version: '3.2'
-networks:
-  metal_network:
-    external: true
-services:
-  $PROJECT_NAME:
+  [PROJECT_NAME]:
     build: "$METAL_HOME/rails"
     command: 'bin/rails server'
     tty: true
@@ -14,9 +9,7 @@ services:
       - '3000'
     volumes:
       - type: bind
-        source: '$PROJECT_PATH'
+        source: '[PROJECT_PATH]'
         target: /app
     depends_on:
       - mongo
-    networks:
-      - metal_network
