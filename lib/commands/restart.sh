@@ -1,2 +1,2 @@
-bash "$METAL_HOME/lib/commands/down.sh"
-bash "$METAL_HOME/lib/commands/up.sh"
+bash "$METAL_HOME/lib/commands/stop.sh"
+bash "$METAL_HOME/lib/commands/start.sh"
