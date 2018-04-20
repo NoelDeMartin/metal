@@ -1,5 +1,5 @@
   [PROJECT_NAME]:
-    build: "$METAL_HOME/rails"
+    build: "[INSTALLATION_PATH]/docker/rails"
     command: 'bin/rails server'
     tty: true
     stdin_open: true

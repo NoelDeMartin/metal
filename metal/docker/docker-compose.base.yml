@@ -6,16 +6,16 @@ services:
     ports:
       - '27017:27017'
     volumes:
-      - "$METAL_HOME/mongo/db:/data/db"
+      - "[HOME_PATH]/mongo/db:/data/db"
   nginx:
     image: nginx:alpine
     ports:
       - '80:80'
     volumes:
-      - "$METAL_HOME/nginx/sites:/etc/nginx/conf.d"
+      - "[HOME_PATH]/nginx/sites:/etc/nginx/conf.d"
     networks:
       default:
         aliases:
           [ALIASES]
   rails:
-    build: "$METAL_HOME/rails"
+    build: "[INSTALLATION_PATH]/docker/rails"
