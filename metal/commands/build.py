@@ -18,4 +18,5 @@ def build(runtime, project):
     if project is None:
         raise ValueError('Project [%s] is not installed' % project_name)
     else:
+        click.echo('Building [%s]...' % project.name)
         runtime.build_project(project)
