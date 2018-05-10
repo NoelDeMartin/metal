@@ -16,6 +16,7 @@ from .commands.ls import ls
 from .commands.install import install
 from .commands.build import build
 from .commands.shell import shell
+from .commands.execute import execute
 from .commands.restart import restart
 
 if __name__ == '__main__':

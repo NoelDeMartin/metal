@@ -1,4 +1,3 @@
-import click
 import unittest
 
 from utils import Stubs, Cli

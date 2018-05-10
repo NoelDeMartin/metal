@@ -84,7 +84,23 @@ class Runtime(object):
         service = compose_project.get_service(service_name)
 
         container = service.get_container()
-        exec_id= container.create_exec('ash', stdin=True, tty=True)
+        exec_id = container.create_exec('sh -l', stdin=True, tty=True)
+        pty = PseudoTerminal(
+            compose_project.client,
+            ExecOperation(
+                compose_project.client,
+                exec_id,
+                interactive=True
+            )
+        )
+        pty.start()
+
+    def execute_command(self, service_name, command):
+        compose_project = self.__get_docker_compose_project()
+        service = compose_project.get_service(service_name)
+
+        container = service.get_container()
+        exec_id = container.create_exec('sh -l -c \"%s"' % command, stdin=True, tty=True)
         pty = PseudoTerminal(
             compose_project.client,
             ExecOperation(
