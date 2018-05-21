@@ -12,7 +12,6 @@ class TestBuild(unittest.TestCase):
     @patch('metal.cli.Runtime', spec=Runtime)
     def test_default_project(self, RuntimeMock):
         dir_name = os.path.basename(os.getcwd())
-        RuntimeMock.return_value.installed_projects = []
         RuntimeMock.return_value.get_project.return_value = None
 
         result = Cli.run('build')
@@ -26,7 +25,6 @@ class TestBuild(unittest.TestCase):
     @patch('metal.cli.Runtime', spec=Runtime)
     def test_uninstalled_project(self, RuntimeMock):
         project = Stubs.project()
-        RuntimeMock.return_value.installed_projects = []
         RuntimeMock.return_value.get_project.return_value = None
 
         result = Cli.run('build', '--project=' + project.name)
@@ -40,7 +38,6 @@ class TestBuild(unittest.TestCase):
     @patch('metal.cli.Runtime', spec=Runtime)
     def test_installed_project(self, RuntimeMock):
         project = Stubs.project()
-        RuntimeMock.return_value.installed_projects = [project]
         RuntimeMock.return_value.get_project.return_value = project
 
         result = Cli.run('build', '--project=' + project.name)

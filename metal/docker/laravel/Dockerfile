@@ -1,8 +1,8 @@
-FROM ruby:2.5-alpine
+FROM php:7.2-alpine
 
-RUN apk --update add --virtual build-tools build-base ruby-dev
 RUN apk --update add nodejs
 RUN apk --update add vim
+RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 
 COPY ./aliases.sh /etc/profile.d
 RUN source /etc/profile.d/aliases.sh

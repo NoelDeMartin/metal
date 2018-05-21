@@ -6,16 +6,18 @@ services:
     ports:
       - '27017:27017'
     volumes:
-      - "[HOME_PATH]/mongo/db:/data/db"
+      - '[HOME_PATH]/mongo/db:/data/db'
   nginx:
     image: nginx:alpine
     ports:
       - '80:80'
     volumes:
-      - "[HOME_PATH]/nginx/sites:/etc/nginx/conf.d"
+      - '[HOME_PATH]/nginx/sites:/etc/nginx/conf.d'
     networks:
       default:
         aliases:
           [ALIASES]
   rails:
-    build: "[INSTALLATION_PATH]/docker/rails"
+    build: '[INSTALLATION_PATH]/docker/rails'
+  laravel:
+    build: '[INSTALLATION_PATH]/docker/laravel'

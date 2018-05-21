@@ -20,8 +20,8 @@ class Stubs():
     fake = Faker()
 
     @classmethod
-    def project(cls, installed=False, active=False):
-        project = Project(cls.fake.company(), os.path.dirname(cls.fake.file_path()))
+    def project(cls, installed=False, active=False, framework='laravel'):
+        project = Project(cls.fake.company(), os.path.dirname(cls.fake.file_path()), framework)
         project.installed = installed
         project.active = active
 

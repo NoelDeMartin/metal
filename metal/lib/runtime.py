@@ -59,15 +59,20 @@ class Runtime(object):
         compose_project.restart([project.name])
 
     def build_project(self, project):
-        # TODO install other dependencies (composer, npm, ...)
+        # TODO install other dependencies (npm, ...)
         compose_project = self.__get_docker_compose_project()
-        service = compose_project.get_service('rails')
+
+        service = compose_project.get_service(project.framework)
 
         compose_project.initialize()
 
+        commands = {
+            'laravel': 'composer install',
+            'rails': 'bundle install --path vendor/bundle',
+        }
         container = service.create_container(
             one_off=True,
-            command='bundle install --path vendor/bundle',
+            command=commands[project.framework],
             volumes=[VolumeSpec.parse(project.path + ':/app')]
         )
 
@@ -168,14 +173,19 @@ class Runtime(object):
         with open(self.installation_path + '/docker/docker-compose.base.yml') as f:
             docker_compose = f.read()
 
-        with open(self.installation_path + '/docker/docker-compose.project.yml') as f:
-            project_docker_compose = f.read()
-            aliases_regex = re.compile(r'( +)\[ALIASES\]\n')
-            for project in self.installed_projects:
-                docker_compose = aliases_regex.sub('\\1- %s.test\n\\1[ALIASES]\n' % project.name, docker_compose) + \
-                    project_docker_compose \
-                        .replace('[PROJECT_NAME]', project.name) \
-                        .replace('[PROJECT_PATH]', project.path)
+        with \
+            open(self.installation_path + '/docker/docker-compose.laravel.yml') as f_laravel, \
+            open(self.installation_path + '/docker/docker-compose.rails.yml') as f_rails:
+                projects_docker_compose = {
+                    'laravel': f_laravel.read(),
+                    'rails': f_rails.read(),
+                }
+                aliases_regex = re.compile(r'( +)\[ALIASES\]\n')
+                for project in self.installed_projects:
+                    docker_compose = aliases_regex.sub('\\1- %s.test\n\\1[ALIASES]\n' % project.name, docker_compose) + \
+                        projects_docker_compose[project.framework] \
+                            .replace('[PROJECT_NAME]', project.name) \
+                            .replace('[PROJECT_PATH]', project.path)
 
         docker_compose = docker_compose \
             .replace('[INSTALLATION_PATH]', self.installation_path) \

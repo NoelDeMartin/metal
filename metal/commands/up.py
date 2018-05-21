@@ -19,3 +19,7 @@ def up(runtime, only):
             runtime.activate_project(project)
 
     runtime.sync_services()
+
+    for project in runtime.installed_projects:
+        if project.active:
+            click.echo('[%s] running @ %s' % (project.name, 'http://%s.test' % project.name))
