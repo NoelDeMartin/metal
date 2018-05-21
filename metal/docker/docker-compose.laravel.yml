@@ -9,3 +9,4 @@
         target: /app
     depends_on:
       - mongo
+      - mysql

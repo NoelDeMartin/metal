@@ -7,6 +7,15 @@ services:
       - '27017:27017'
     volumes:
       - '[HOME_PATH]/mongo/db:/data/db'
+  mysql:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret
+    command: mysqld
+    ports:
+      - '3306:3306'
+    volumes:
+      - '[HOME_PATH]/mysql/db:/var/lib/mysql'
   nginx:
     image: nginx:alpine
     ports:
