@@ -36,6 +36,12 @@ class Runtime(object):
         self.__update_installed_projects()
         self.__rebuild_docker_compose()
 
+    def uninstall_project(self, project):
+        project.installed = False
+        self.installed_projects.remove(project)
+        self.__update_installed_projects()
+        self.__rebuild_docker_compose()
+
     def activate_project(self, project):
         project.active = True
         self.active_projects.append(project)

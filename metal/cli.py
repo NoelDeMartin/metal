@@ -14,6 +14,7 @@ from .commands.up import up
 from .commands.down import down
 from .commands.ls import ls
 from .commands.install import install
+from .commands.uninstall import uninstall
 from .commands.build import build
 from .commands.shell import shell
 from .commands.execute import execute
