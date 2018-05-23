@@ -1,20 +1,12 @@
 import os
 import re
-import sys
 import json
 import metal
 
+from .docker import Docker
 from .project import Project
 
 from shutil import copyfile
-
-from compose.config import config
-from compose.project import Project as DockerComposeProject
-from compose.cli.docker_client import docker_client
-from compose.config.environment import Environment
-from compose.config.types import VolumeSpec
-
-from dockerpty.pty import PseudoTerminal, ExecOperation
 
 class Runtime(object):
 
@@ -26,6 +18,8 @@ class Runtime(object):
         self.active_projects_file = self.home_path + '/active_projects.json'
         self.docker_compose_file = self.home_path + '/docker-compose.yml'
         self.nginx_sites_path = self.home_path + '/nginx/sites/'
+
+        self.docker = Docker(self.home_path, self.docker_compose_file)
 
         self.__init_home()
         self.__load_projects()
@@ -47,112 +41,53 @@ class Runtime(object):
         self.active_projects.append(project)
         self.__update_active_projects()
         self.__add_project_site(project)
-
-        compose_project = self.__get_docker_compose_project()
-        compose_project.up([project.name], detached=True)
+        self.docker.up([project.name])
 
     def deactivate_project(self, project):
         project.active = False
         self.active_projects.remove(project)
         self.__update_active_projects()
         self.__remove_project_site(project)
-
-        compose_project = self.__get_docker_compose_project()
-        compose_project.stop([project.name])
+        self.docker.stop([project.name])
 
     def restart_project(self, project):
-        compose_project = self.__get_docker_compose_project()
-        compose_project.restart([project.name])
+        self.docker.restart([project.name])
 
     def build_project(self, project):
         # TODO install other dependencies (npm, ...)
-        compose_project = self.__get_docker_compose_project()
 
-        service = compose_project.get_service(project.framework)
-
-        compose_project.initialize()
-
-        commands = {
+        build_commands = {
             'laravel': 'composer install',
             'rails': 'bundle install --path vendor/bundle',
         }
-        container = service.create_container(
+
+        self.docker.execute_command(
+            project.framework,
+            build_commands[project.framework],
+            volumes=[project.path + ':/app'],
             one_off=True,
-            command=commands[project.framework],
-            volumes=[VolumeSpec.parse(project.path + ':/app')]
         )
-
-        container.start()
-
-        for log in container.attach(stream=True, logs=True):
-            sys.stdout.write(log)
-            sys.stdout.flush()
-
-        compose_project.client.remove_container(container.id, force=True, v=True)
 
     def open_shell(self, service_name):
-        compose_project = self.__get_docker_compose_project()
-        service = compose_project.get_service(service_name)
+        self.docker.execute_command(service_name, 'sh -l')
 
-        container = service.get_container()
-        exec_id = container.create_exec('sh -l', stdin=True, tty=True)
-        pty = PseudoTerminal(
-            compose_project.client,
-            ExecOperation(
-                compose_project.client,
-                exec_id,
-                interactive=True
-            )
-        )
-        pty.start()
 
     def execute_command(self, service_name, command):
-        compose_project = self.__get_docker_compose_project()
-        service = compose_project.get_service(service_name)
-
-        container = service.get_container()
-        exec_id = container.create_exec('sh -l -c \"%s"' % command, stdin=True, tty=True)
-        pty = PseudoTerminal(
-            compose_project.client,
-            ExecOperation(
-                compose_project.client,
-                exec_id,
-                interactive=True
-            )
-        )
-        pty.start()
+        self.docker.execute_command(service_name, 'sh -l -c \"%s"' % command)
 
     def sync_services(self):
-        compose_project = self.__get_docker_compose_project()
         if len(self.active_projects) > 0:
-            if len(compose_project.containers(['nginx'])) > 0:
-                compose_project.restart(['nginx'])
+            if len(self.docker.get_containers(['nginx'])) > 0:
+                self.docker.restart(['nginx'])
             else:
-                compose_project.up(['nginx'])
+                self.docker.up(['nginx'])
         else:
-            compose_project.down(False, True)
+            self.docker.down()
 
     def get_project(self, name):
         for project in self.installed_projects:
             if project.name == name:
                 return project
-
-    def __get_docker_compose_project(self):
-        client = docker_client(Environment())
-        config_data = config.load(
-            config.ConfigDetails(
-                self.home_path,
-                [
-                    config.ConfigFile.from_filename(self.docker_compose_file)
-                ]
-            )
-        )
-
-        return DockerComposeProject.from_config(
-            name='metal',
-            client=client,
-            config_data=config_data
-        )
 
     def __add_project_site(self, project):
 
