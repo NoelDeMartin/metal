@@ -69,7 +69,7 @@ class Runtime(object):
         )
 
     def open_shell(self, service_name):
-        self.docker.execute_command(service_name, 'sh -l')
+        self.docker.open_shell(service_name)
 
 
     def execute_command(self, service_name, command):
