@@ -1,8 +1,9 @@
 FROM ruby:2.5-alpine
 
-RUN apk --update add --virtual build-tools build-base ruby-dev
-RUN apk --update add nodejs
-RUN apk --update add vim
+RUN set -x \
+    && apk --update add --virtual build-tools build-base ruby-dev \
+    && apk --update add nodejs \
+    && apk --update add vim
 
 COPY ./aliases.sh /etc/profile.d
 RUN source /etc/profile.d/aliases.sh
