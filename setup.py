@@ -14,9 +14,19 @@ def get_files(*paths):
 
     return files
 
+with open('README.md', 'r') as f:
+    long_description = f.read()
+
 setup(
     name='metal',
-    version='0.1.0',
+    version='0.0.1',
+    author='Noel De Martin',
+    author_email='noeldemartin@gmail.com',
+    description='Docker wrapper: Forget about your bare-metal and get started right away.',
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    url='https://github.com/noeldemartin/metal',
+    license='MIT',
     packages=['metal', 'metal.commands', 'metal.lib'],
     package_data={
         'metal': get_files('docker', 'nginx')
