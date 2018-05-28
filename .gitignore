@@ -1,4 +1,4 @@
 *.pyc
 dist/
 build/
-metal.egg-info/
+metal_cli.egg-info/

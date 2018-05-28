@@ -18,7 +18,7 @@ with open('README.md', 'r') as f:
     long_description = f.read()
 
 setup(
-    name='metal',
+    name='metal-cli',
     version='0.0.1',
     author='Noel De Martin',
     author_email='noeldemartin@gmail.com',
