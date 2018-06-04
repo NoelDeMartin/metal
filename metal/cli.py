@@ -11,14 +11,15 @@ def cli(context):
     context.obj = Runtime()
 
 from .commands.up import up
-from .commands.down import down
 from .commands.ls import ls
-from .commands.install import install
-from .commands.uninstall import uninstall
+from .commands.new import new
+from .commands.down import down
 from .commands.build import build
 from .commands.shell import shell
+from .commands.install import install
 from .commands.execute import execute
 from .commands.restart import restart
+from .commands.uninstall import uninstall
 
 if __name__ == '__main__':
    cli(click.core.Context(None))

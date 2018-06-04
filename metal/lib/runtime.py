@@ -25,6 +25,7 @@ class Runtime(object):
         self.__load_projects()
 
     def install_project(self, project):
+        # TODO edit /etc/hosts
         project.installed = True
         self.installed_projects.append(project)
         self.__update_installed_projects()
@@ -35,6 +36,26 @@ class Runtime(object):
         self.installed_projects.remove(project)
         self.__update_installed_projects()
         self.__rebuild_docker_compose()
+
+    def create_project(self, name, path, framework):
+        project = Project(name, path + '/' + name, framework)
+
+        create_commands = {
+            'laravel': 'composer create-project --prefer-dist laravel/laravel ' + name,
+            'rails': '', # TODO
+        }
+
+        self.docker.execute_command(
+            framework,
+            create_commands[framework],
+            volumes=[path + ':/app'],
+            one_off=True,
+        )
+
+        # TODO abort if error ocurred (to prevent installation)
+        # TODO chown to current user
+
+        self.install_project(project)
 
     def activate_project(self, project):
         project.active = True
@@ -70,7 +91,6 @@ class Runtime(object):
 
     def open_shell(self, service_name):
         self.docker.open_shell(service_name)
-
 
     def execute_command(self, service_name, command):
         self.docker.execute_command(service_name, 'sh -l -c \"%s"' % command)
