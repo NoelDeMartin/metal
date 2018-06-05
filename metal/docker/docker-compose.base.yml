@@ -8,7 +8,7 @@ services:
     volumes:
       - '[HOME_PATH]/mongo/db:/data/db'
   mysql:
-    image: mysql
+    build: '[INSTALLATION_PATH]/docker/mysql'
     environment:
       - MYSQL_ROOT_PASSWORD=secret
     command: mysqld
