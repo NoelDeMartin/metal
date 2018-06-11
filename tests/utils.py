@@ -1,4 +1,5 @@
 import os
+import re
 
 from faker import Faker
 
@@ -20,8 +21,12 @@ class Stubs():
     fake = Faker()
 
     @classmethod
-    def project(cls, installed=False, active=False, framework='laravel'):
-        project = Project(cls.fake.company(), os.path.dirname(cls.fake.file_path()), framework)
+    def project(cls, installed=False, active=False, framework='laravel', path=None, name=None):
+        if path is None:
+            path = os.path.dirname(cls.fake.file_path())
+        if name is None:
+            name = re.sub(r'\W+', '-', cls.fake.company()).lower()
+        project = Project(name, path, framework)
         project.installed = installed
         project.active = active
 

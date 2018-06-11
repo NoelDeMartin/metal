@@ -33,3 +33,27 @@ class TestInstall(unittest.TestCase):
 
         assert result.exit_code == 0
         assert result.output == 'Installing [%s]...\n' % dir_name
+
+    @patch('metal.cli.Runtime', spec=Runtime)
+    def test_project_name_slugify(self, RuntimeMock):
+        RuntimeMock.return_value.get_project.return_value = None
+        name = 'Foobar and sons'
+        slug = 'foobar-and-sons'
+        result = Cli.run('install', '--name=' + name, '--framework=rails')
+
+        RuntimeMock.return_value.get_project.assert_called_once_with('foobar-and-sons')
+        RuntimeMock.return_value.install_project.assert_called_once()
+        RuntimeMock.return_value.build_project.assert_called_once()
+
+        project = RuntimeMock.return_value.install_project.call_args[0][0]
+        isinstance(project, Project)
+        assert project.name == slug
+        assert project.framework == 'rails'
+
+        project = RuntimeMock.return_value.build_project.call_args[0][0]
+        isinstance(project, Project)
+        assert project.name == slug
+        assert project.framework == 'rails'
+
+        assert result.exit_code == 0
+        assert result.output == 'Installing [%s]...\n' % slug

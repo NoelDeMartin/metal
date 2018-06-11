@@ -1,20 +1,24 @@
+import os
 import click
 
 from ..cli import cli, pass_runtime
 
 @cli.command()
-@click.option('--only', help='Comma separated list of projects to start')
+@click.option('--projects', help='Comma separated list of projects to start')
+@click.option('--only', help='Start only current project', is_flag=True)
 @pass_runtime
-def up(runtime, only):
+def up(runtime, projects, only):
     """Start projects"""
 
-    if only is None:
-        only = map(lambda project: project.name, runtime.installed_projects)
+    if only:
+        projects = [os.path.basename(os.getcwd())]
+    elif projects is None:
+        projects = map(lambda project: project.name, runtime.installed_projects)
     else:
-        only = only.split(',')
+        projects = projects.split(',')
 
     for project in runtime.installed_projects:
-        if not project.active and project.name in only:
+        if not project.active and project.name in projects:
             click.echo('Starting [%s]...' % project.name)
             runtime.activate_project(project)
 

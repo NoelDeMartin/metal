@@ -1,4 +1,5 @@
 import os
+import re
 import click
 
 from ..cli import cli, pass_runtime
@@ -17,6 +18,8 @@ def install(runtime, name, path, framework):
 
     if name is None:
         name = os.path.basename(path)
+
+    name = re.sub(r'\W+', '-', name).lower()
 
     if framework is None:
         if os.path.isfile(path + '/bin/rails'):
