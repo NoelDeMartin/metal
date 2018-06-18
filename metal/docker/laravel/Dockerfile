@@ -9,7 +9,11 @@ RUN set -x \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb \
     # TODO only do this if mysql is necessary
-    && docker-php-ext-install pdo pdo_mysql
+    && docker-php-ext-install pdo pdo_mysql \
+    # TODO optional extensions
+    && apk --update add --virtual gd-libs freetype-dev libjpeg-turbo-dev libpng-dev \
+    && docker-php-ext-configure gd \
+    && docker-php-ext-install gd
 
 COPY ./aliases.sh /etc/profile.d
 RUN source /etc/profile.d/aliases.sh
