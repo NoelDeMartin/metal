@@ -19,8 +19,11 @@ RUN set -x \
     && apk add libmcrypt-dev \
     && pecl install mcrypt-1.0.1 \
     && docker-php-ext-enable mcrypt \
-    && rm /var/cache/apk/*
+    && rm /var/cache/apk/* \
+    # TODO optional xDebug
+    && pecl install xdebug
 
+COPY ./php.ini /usr/local/etc/php/conf.d
 COPY ./aliases.sh /etc/profile.d
 RUN source /etc/profile.d/aliases.sh
 
