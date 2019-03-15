@@ -78,7 +78,7 @@ class Runtime(object):
         # TODO install other dependencies (npm, ...)
 
         build_commands = {
-            'laravel': 'composer install',
+            'laravel': 'composer install --ignore-platform-reqs',
             'rails': 'bundle install --path vendor/bundle',
         }
 

@@ -8,6 +8,9 @@ RUN set -x \
     && apk --update add --virtual build-tools build-base autoconf \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb \
+    # TODO optional zip
+    && apk add zlib-dev \
+    && docker-php-ext-install zip \
     # TODO optional mysql
     && docker-php-ext-install pdo pdo_mysql \
     # TODO optional image extensions
@@ -15,6 +18,12 @@ RUN set -x \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd \
     && docker-php-ext-install exif \
+    # TODO optional sockets extension
+    && docker-php-ext-install sockets \
+    && docker-php-ext-enable sockets \
+    # TODO optional bcmath
+    && docker-php-ext-install bcmath \
+    && docker-php-ext-enable bcmath \
     # TODO optional mcrypt
     && apk add libmcrypt-dev \
     && pecl install mcrypt-1.0.1 \

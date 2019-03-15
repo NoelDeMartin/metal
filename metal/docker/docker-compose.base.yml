@@ -16,6 +16,8 @@ services:
       - '3306:3306'
     volumes:
       - '[HOME_PATH]/mysql/db:/var/lib/mysql'
+  selenium:
+    image: selenium/standalone-chrome
   nginx:
     image: nginx:alpine
     ports:
