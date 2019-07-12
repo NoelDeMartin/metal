@@ -21,10 +21,10 @@ RUN set -x \
     # TODO optional sockets extension
     && docker-php-ext-install sockets \
     && docker-php-ext-enable sockets \
-    # TODO optional bcmath
+    # TODO optional bcmath extension
     && docker-php-ext-install bcmath \
     && docker-php-ext-enable bcmath \
-    # TODO optional mcrypt
+    # TODO optional mcrypt extension
     && apk add libmcrypt-dev \
     && pecl install mcrypt-1.0.1 \
     && docker-php-ext-enable mcrypt \
