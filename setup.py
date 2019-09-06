@@ -19,7 +19,7 @@ with open('README.md', 'r') as f:
 
 setup(
     name='metal-cli',
-    version='0.0.1',
+    version='0.0.2',
     author='Noel De Martin',
     author_email='noeldemartin@gmail.com',
     description='Docker wrapper: Forget about your bare-metal and get started right away.',
